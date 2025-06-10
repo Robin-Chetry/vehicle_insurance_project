@@ -1,0 +1,14 @@
+# [project] section defines your package metadata
+[project]
+name = "MLOps-pipelines"                # The name of your project/package
+version = "0.0.1"                      # Package version following semantic versioning
+description = "An MLOps project for productionizing models"  # Short description of your project
+authors = [{name = "Robin Rawat", email = "robinrawatchetry@gmail.com"}]  # Author info
+
+# [tool.setuptools] configures setuptools behavior
+[tool.setuptools]
+packages = {find = {}}                  # Automatically find all packages (folders with __init__.py)
+
+# [tool.setuptools.dynamic] specifies dynamic values to be read from files
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}  # Read install dependencies from the requirements.txt file
