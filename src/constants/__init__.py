@@ -92,8 +92,8 @@ MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101  # Random state to ensure reproducibil
 
 # ----------------------------- Model Evaluation & Deployment -----------------------------
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02  # Minimum change in score to consider retraining/deploying new model
-MODEL_BUCKET_NAME = "my-model-mlopsproj"  # S3 bucket name for storing model artifacts
-MODEL_PUSHER_S3_KEY = "model-registry"  # S3 folder/key prefix for model registry
+MODEL_BUCKET_NAME = "my-vehicle-prediction"  # S3 bucket name for storing model artifacts
+MODEL_PUSHER_S3_KEY = "model-registry/vehicle-price-predictor/v1"  # S3 folder/key prefix for model registry
 
 
 

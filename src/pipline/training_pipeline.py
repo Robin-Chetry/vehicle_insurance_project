@@ -12,8 +12,8 @@ from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
-# from src.components.model_evaluation import ModelEvaluation
-# from src.components.model_pusher import ModelPusher
+from src.components.model_evaluation import ModelEvaluation
+from src.components.model_pusher import ModelPusher
 
 # Importing configuration classes for each pipeline stage
 from src.entity.config_entity import (
@@ -21,8 +21,8 @@ from src.entity.config_entity import (
     DataValidationConfig,       # Configuration for data validation
     DataTransformationConfig,   # Configuration for data transformation
     ModelTrainerConfig,         # Configuration for model training
-    # ModelEvaluationConfig,      # Configuration for model evaluation
-    # ModelPusherConfig           # Configuration for model deployment
+    ModelEvaluationConfig,      # Configuration for model evaluation
+    ModelPusherConfig           # Configuration for model deployment
 )
 
 # Importing artifact classes that hold outputs from each pipeline stage
@@ -31,8 +31,8 @@ from src.entity.artifact_entity import (
     DataValidationArtifact,     # Output from data validation
     DataTransformationArtifact, # Output from data transformation
     ModelTrainerArtifact,       # Output from model training
-    # ModelEvaluationArtifact,    # Output from model evaluation
-    # ModelPusherArtifact        # Output from model deployment
+    ModelEvaluationArtifact,    # Output from model evaluation
+    ModelPusherArtifact        # Output from model deployment
 )
 
 
@@ -59,11 +59,11 @@ class TrainPipeline:
         # Initialize model training configuration
         self.model_trainer_config = ModelTrainerConfig()
         
-        # # Initialize model evaluation configuration
-        # self.model_evaluation_config = ModelEvaluationConfig()
+        # Initialize model evaluation configuration
+        self.model_evaluation_config = ModelEvaluationConfig()
         
-        # # Initialize model deployment configuration
-        # self.model_pusher_config = ModelPusherConfig()
+        # Initialize model deployment configuration
+        self.model_pusher_config = ModelPusherConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """
@@ -185,59 +185,59 @@ class TrainPipeline:
             # Convert any exceptions to custom exception format
             raise MyException(e, sys)
 
-    # def start_model_evaluation(self, 
-    #                          data_ingestion_artifact: DataIngestionArtifact,
-    #                          model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifact:
-    #     """
-    #     Executes the model evaluation component of the pipeline.
-    #     Args:
-    #         data_ingestion_artifact: Contains reference to test data
-    #         model_trainer_artifact: Contains trained model to evaluate
-    #     Returns:
-    #         ModelEvaluationArtifact: Contains evaluation metrics and acceptance status
-    #     """
-    #     try:
-    #         # Create ModelEvaluation instance with required artifacts and config
-    #         model_evaluation = ModelEvaluation(
-    #             model_eval_config=self.model_evaluation_config,
-    #             data_ingestion_artifact=data_ingestion_artifact,
-    #             model_trainer_artifact=model_trainer_artifact
-    #         )
+    def start_model_evaluation(self, 
+                             data_ingestion_artifact: DataIngestionArtifact,
+                             model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifact:
+        """
+        Executes the model evaluation component of the pipeline.
+        Args:
+            data_ingestion_artifact: Contains reference to test data
+            model_trainer_artifact: Contains trained model to evaluate
+        Returns:
+            ModelEvaluationArtifact: Contains evaluation metrics and acceptance status
+        """
+        try:
+            # Create ModelEvaluation instance with required artifacts and config
+            model_evaluation = ModelEvaluation(
+                model_eval_config=self.model_evaluation_config,
+                data_ingestion_artifact=data_ingestion_artifact,
+                model_trainer_artifact=model_trainer_artifact
+            )
             
-    #         # Execute model evaluation process and get results
-    #         model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
+            # Execute model evaluation process and get results
+            model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
             
-    #         # Return the evaluation results
-    #         return model_evaluation_artifact
+            # Return the evaluation results
+            return model_evaluation_artifact
         
-    #     except Exception as e:
-    #         # Convert any exceptions to custom exception format
-    #         raise MyException(e, sys)
+        except Exception as e:
+            # Convert any exceptions to custom exception format
+            raise MyException(e, sys)
 
-    # def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifact) -> ModelPusherArtifact:
-    #     """
-    #     Executes the model deployment component of the pipeline.
-    #     Args:
-    #         model_evaluation_artifact: Contains evaluation results and approved model
-    #     Returns:
-    #         ModelPusherArtifact: Contains information about deployed model
-    #     """
-    #     try:
-    #         # Create ModelPusher instance with required artifacts and config
-    #         model_pusher = ModelPusher(
-    #             model_evaluation_artifact=model_evaluation_artifact,
-    #             model_pusher_config=self.model_pusher_config
-    #         )
+    def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifact) -> ModelPusherArtifact:
+        """
+        Executes the model deployment component of the pipeline.
+        Args:
+            model_evaluation_artifact: Contains evaluation results and approved model
+        Returns:
+            ModelPusherArtifact: Contains information about deployed model
+        """
+        try:
+            # Create ModelPusher instance with required artifacts and config
+            model_pusher = ModelPusher(
+                model_evaluation_artifact=model_evaluation_artifact,
+                model_pusher_config=self.model_pusher_config
+            )
             
-    #         # Execute model deployment process and get results
-    #         model_pusher_artifact = model_pusher.initiate_model_pusher()
+            # Execute model deployment process and get results
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
             
-    #         # Return the deployment results
-    #         return model_pusher_artifact
+            # Return the deployment results
+            return model_pusher_artifact
         
-    #     except Exception as e:
-    #         # Convert any exceptions to custom exception format
-    #         raise MyException(e, sys)
+        except Exception as e:
+            # Convert any exceptions to custom exception format
+            raise MyException(e, sys)
 
     def run_pipeline(self) -> None:
         """
@@ -268,24 +268,24 @@ class TrainPipeline:
                 data_transformation_artifact=data_transformation_artifact
             )
             
-            # # Log start of model evaluation and execute with previous results
-            # logging.info("Starting model evaluation...")
-            # model_evaluation_artifact = self.start_model_evaluation(
-            #     data_ingestion_artifact=data_ingestion_artifact,
-            #     model_trainer_artifact=model_trainer_artifact
-            # )
+            # Log start of model evaluation and execute with previous results
+            logging.info("Starting model evaluation...")
+            model_evaluation_artifact = self.start_model_evaluation(
+                data_ingestion_artifact=data_ingestion_artifact,
+                model_trainer_artifact=model_trainer_artifact
+            )
             
-            # # Check if model was accepted in evaluation
-            # if not model_evaluation_artifact.is_model_accepted:
-            #     # Log that model wasn't accepted and stop pipeline
-            #     logging.info("Model not accepted. Stopping pipeline.")
-            #     return None
+            # Check if model was accepted in evaluation
+            if not model_evaluation_artifact.is_model_accepted:
+                # Log that model wasn't accepted and stop pipeline
+                logging.info("Model not accepted. Stopping pipeline.")
+                return None
                 
-            # # Log start of model deployment and execute with evaluation results
-            # logging.info("Starting model pushing...")
-            # model_pusher_artifact = self.start_model_pusher(
-            #     model_evaluation_artifact=model_evaluation_artifact
-            # )
+            # Log start of model deployment and execute with evaluation results
+            logging.info("Starting model pushing...")
+            model_pusher_artifact = self.start_model_pusher(
+                model_evaluation_artifact=model_evaluation_artifact
+            )
             
             # Log successful pipeline completion
             logging.info("Pipeline completed successfully.")
