@@ -1,6 +1,4 @@
-Here’s a clean and concise **GitHub README** format for your project:
 
----
 
 # Vehicle Insurance Data Pipeline - MLOps Project
 
